@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="circle_button_diameter">85dp</dimen>
+
+    <!--Bottom Bar Buttons Size-->
+    <dimen name="bottom_bar_button_width">85dp</dimen>
+    <dimen name="bottom_bar_button_height">170dp</dimen>
+</resources>
