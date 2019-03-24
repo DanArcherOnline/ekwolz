@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="container_margin">32dp</dimen>
+
+    <!--Circle Button Size-->
+    <dimen name="circle_button_diameter">65dp</dimen>
+
+    <!--Bottom Bar Buttons Size-->
+    <dimen name="bottom_bar_button_width">143dp</dimen>
+    <dimen name="bottom_bar_button_height">63dp</dimen>
+
+    <dimen name="no_width">0dp</dimen>
+    <dimen name="no_height">0dp</dimen>
+
+    <!--Keyboard Margins-->
+    <!--kb=keyboard r=row h=horizontal v=vertical mid=middle-->
+    <dimen name="kb_r2_h_margin">7dp</dimen>
+    <dimen name="kb_r2_top_margin">23dp</dimen>
+    <dimen name="kb_r3_h_margin">50dp</dimen>
+    <dimen name="kb_r3_top_margin">61dp</dimen>
+    <dimen name="kb_r4_top_margin">10dp</dimen>
+    <dimen name="kb_r5_top_margin">61dp</dimen>
+    <dimen name="kb_r6_top_margin">178dp</dimen>
+    <dimen name="kb_mid_h_margin">14dp</dimen>
+    <dimen name="kb_mid_v_margin">20dp</dimen>
+    <dimen name="bottom_bar_button_top_margin">12dp</dimen>
+</resources>
