@@ -32,17 +32,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:gravity="end"
-                android:padding="24dp"
-                android:shadowColor="#666"
-                android:shadowDx="8"
-                android:shadowDy="8"
-                android:shadowRadius="36"
-                android:text="12345"
-                android:textAlignment="textEnd"
-                android:textColor="@android:color/white"
+                style="@style/shadowText"
                 android:textSize="107sp"
-                app:fontFamily="sans-serif-thin"
+                android:text="12345"
                 tools:text="1234" />
 
         </RelativeLayout>
