@@ -7,5 +7,6 @@
     <!--Bottom Bar Buttons Size-->
     <dimen name="bottom_bar_button_width">50dp</dimen>
     <dimen name="bottom_bar_button_height">100dp</dimen>
+    <dimen name="expression_tv_width">300dp</dimen>
 
 </resources>

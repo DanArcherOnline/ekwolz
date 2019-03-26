@@ -12,32 +12,23 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <RelativeLayout
-            android:id="@+id/expression_container"
-            android:layout_width="@dimen/no_width"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/container_margin"
-            android:layout_marginLeft="@dimen/container_margin"
-            android:layout_marginTop="@dimen/container_margin"
-            android:layout_marginEnd="@dimen/container_margin"
-            android:layout_marginRight="@dimen/container_margin"
-            android:layout_marginBottom="@dimen/container_margin"
+        <!--TODO: extract layout_height to dimens.xml and change according to screen width-->
+        <!--TODO: check if autoSizeMaxTextSize is needed-->
+
+        <TextView
+            android:id="@+id/expression_tv"
+            style="@style/calculatorText"
+            android:layout_width="@dimen/expression_tv_width"
+            android:layout_height="@dimen/expression_tv_height"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="32dp"
+            android:text="12345"
+            app:autoSizeMaxTextSize="2000sp"
+            app:autoSizeTextType="uniform"
             app:layout_constraintBottom_toTopOf="@+id/keyboardLayout"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <TextView
-                android:id="@+id/expression_et"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                style="@style/shadowText"
-                android:textSize="107sp"
-                android:text="12345"
-                tools:text="1234" />
-
-        </RelativeLayout>
+            app:layout_constraintEnd_toEndOf="@+id/keyboardLayout"
+            app:layout_constraintStart_toStartOf="@+id/keyboardLayout"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/keyboardLayout"

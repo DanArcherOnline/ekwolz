@@ -8,6 +8,9 @@
     <dimen name="bottom_bar_button_width">229dp</dimen>
     <dimen name="bottom_bar_button_height">101dp</dimen>
 
+    <!--Expression TextViews Height-->
+    <dimen name="expression_tv_height">300dp</dimen>
+
     <!--Keyboard Margins-->
     <!--kb=keyboard r=row h=horizontal v=vertical mid=middle-->
     <dimen name="kb_r2_h_margin">7dp</dimen>

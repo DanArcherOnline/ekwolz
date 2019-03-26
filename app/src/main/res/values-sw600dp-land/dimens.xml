@@ -5,4 +5,9 @@
     <!--Bottom Bar Buttons Size-->
     <dimen name="bottom_bar_button_width">85dp</dimen>
     <dimen name="bottom_bar_button_height">170dp</dimen>
+
+    <!--Expression TextViews Dimensions-->
+    <dimen name="expression_tv_height">350dp</dimen>
+    <dimen name="expression_tv_width">600dp</dimen>
+
 </resources>

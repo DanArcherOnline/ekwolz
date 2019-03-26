@@ -12,9 +12,8 @@
         <item name="android:navigationBarColor">@android:color/transparent</item>
     </style>
 
-    <style name="shadowText">
-        <item name="android:gravity">end</item>
-        <item name="android:padding">24dp</item>
+    <style name="calculatorText">
+        <item name="android:gravity">center</item>
         <item name="android:shadowColor">#999</item>
         <item name="android:shadowDx">8</item>
         <item name="android:shadowDy">8</item>
@@ -22,6 +21,9 @@
         <item name="android:textAlignment">textEnd</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:fontFamily">sans-serif-thin</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingRight">10dp</item>
     </style>
 
 </resources>
