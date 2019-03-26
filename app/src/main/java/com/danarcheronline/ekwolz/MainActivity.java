@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
 //        make the status bar and navigation bar transparent
         UIUtils.setSystemUIBarsToTransparent(this, mAppContainerResourceId);
 
+//        have the margins adjust appropriately when the devices orientation changes
         enableMarginAdjustmentDetection();
 
     }
