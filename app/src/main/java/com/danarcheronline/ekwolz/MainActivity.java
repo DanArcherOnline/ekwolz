@@ -1,11 +1,11 @@
 package com.danarcheronline.ekwolz;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.hardware.display.DisplayManager;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -13,11 +13,14 @@ public class MainActivity extends AppCompatActivity {
 
     DisplayManager.DisplayListener mDisplayListener;
     int mAppContainerResourceId;
+    MainViewModel mViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
 
         mAppContainerResourceId = R.id.appContainer;
 
