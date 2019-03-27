@@ -6,7 +6,7 @@ import android.arch.lifecycle.ViewModel;
 
 public class MainViewModel extends ViewModel {
 
-    private String currentInput;
+    private String currentInput = "";
     private float input1;
     private float input2;
 
@@ -16,6 +16,12 @@ public class MainViewModel extends ViewModel {
 
     public void setCurrentInput(String currentInput) {
         this.currentInput = currentInput;
+    }
+
+    public void appendToCurrentInput(String inputToAppend) {
+        if(this.currentInput.length() <= 9) {
+            this.currentInput = currentInput + inputToAppend;
+        }
     }
 
     public float getInput1() {

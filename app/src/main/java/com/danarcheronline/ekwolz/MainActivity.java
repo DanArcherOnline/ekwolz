@@ -7,6 +7,7 @@ import android.hardware.display.DisplayManager;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 
 import com.danarcheronline.ekwolz.databinding.ActivityMainBinding;
 
@@ -36,6 +37,21 @@ public class MainActivity extends AppCompatActivity {
 //        have the margins adjust appropriately when the devices orientation changes
         enableMarginAdjustmentDetection();
 
+        setViewOnClickListeners();
+
+    }
+
+    private void setViewOnClickListeners() {
+        mBinding.button0.setOnClickListener(new NumberPadButtonOnClickListener("0"));
+        mBinding.button1.setOnClickListener(new NumberPadButtonOnClickListener("1"));
+        mBinding.button2.setOnClickListener(new NumberPadButtonOnClickListener("2"));
+        mBinding.button3.setOnClickListener(new NumberPadButtonOnClickListener("3"));
+        mBinding.button4.setOnClickListener(new NumberPadButtonOnClickListener("4"));
+        mBinding.button5.setOnClickListener(new NumberPadButtonOnClickListener("5"));
+        mBinding.button6.setOnClickListener(new NumberPadButtonOnClickListener("6"));
+        mBinding.button7.setOnClickListener(new NumberPadButtonOnClickListener("7"));
+        mBinding.button8.setOnClickListener(new NumberPadButtonOnClickListener("8"));
+        mBinding.button9.setOnClickListener(new NumberPadButtonOnClickListener("9"));
     }
 
     @Override
@@ -65,6 +81,21 @@ public class MainActivity extends AppCompatActivity {
 
         DisplayManager displayManager = (DisplayManager) this.getSystemService(Context.DISPLAY_SERVICE);
         displayManager.registerDisplayListener(mDisplayListener, new Handler());
+    }
+
+    private class NumberPadButtonOnClickListener implements View.OnClickListener {
+
+        String mNumber;
+
+        public NumberPadButtonOnClickListener(String number) {
+            this.mNumber = number;
+        }
+
+        @Override
+        public void onClick(View v) {
+            mViewModel.appendToCurrentInput(mNumber);
+            mBinding.expressionTv.setText(mViewModel.getCurrentInput());
+        }
     }
 }
 
