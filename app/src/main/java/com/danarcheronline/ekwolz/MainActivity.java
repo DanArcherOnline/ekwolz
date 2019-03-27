@@ -29,6 +29,10 @@ public class MainActivity extends AppCompatActivity {
 
         mViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
 
+//        set the expression text view to display the current input
+//        when the device is rotated, the text views content will stay consistent
+        mBinding.expressionTv.setText(mViewModel.getCurrentInput());
+
         mAppContainerResourceId = R.id.appContainer;
 
 //        make the status bar and navigation bar transparent
