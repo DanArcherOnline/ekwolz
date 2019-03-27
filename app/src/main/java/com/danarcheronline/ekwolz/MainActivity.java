@@ -2,10 +2,13 @@ package com.danarcheronline.ekwolz;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.databinding.DataBindingUtil;
 import android.hardware.display.DisplayManager;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.danarcheronline.ekwolz.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -14,11 +17,14 @@ public class MainActivity extends AppCompatActivity {
     DisplayManager.DisplayListener mDisplayListener;
     int mAppContainerResourceId;
     MainViewModel mViewModel;
+    ActivityMainBinding mBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
         mViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
 
