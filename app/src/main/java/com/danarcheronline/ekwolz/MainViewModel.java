@@ -3,40 +3,166 @@ package com.danarcheronline.ekwolz;
 
 import android.arch.lifecycle.ViewModel;
 
+import java.text.DecimalFormat;
+
 
 public class MainViewModel extends ViewModel {
 
-    private String currentInput = "";
-    private float input1;
-    private float input2;
+    Calculator calculator;
+    DecimalFormat decimalFormat;
 
-    public String getCurrentInput() {
-        return currentInput;
+    private boolean initInputState = true;
+    private boolean repeatEquation = false;
+    private boolean clearAll = true;
+
+    private String resultString = "";
+    private String inputString = "";
+    private double result = Double.NaN;
+    private double input = Double.NaN;
+    private String operator;
+
+    public MainViewModel() {
+        this.calculator = new Calculator();
+        this.decimalFormat = new DecimalFormat("###,###,###.##############");
     }
 
-    public void setCurrentInput(String currentInput) {
-        this.currentInput = currentInput;
-    }
-
-    public void appendToCurrentInput(String inputToAppend) {
-        if(this.currentInput.length() <= 9) {
-            this.currentInput = currentInput + inputToAppend;
+    public void saveInput(String inputToAppend) {
+        if (initInputState) {
+            if (resultString.length() <= 8) {
+                resultString += inputToAppend;
+                result = Double.parseDouble(resultString);
+            }
+        } else {
+            if (inputString.length() <= 8) {
+                inputString += inputToAppend;
+                input = Double.parseDouble(inputString);
+            }
+        }
+        if(clearAll) {
+            clearAll = false;
         }
     }
 
-    public float getInput1() {
-        return input1;
+    public void operate(String operator) {
+
+        if (repeatEquation) {
+            this.inputString = "";
+            this.input = Double.NaN;
+            repeatEquation = false;
+        }
+
+        if (initInputState) {
+            if (!Double.isNaN(result)) {
+                this.operator = operator;
+                initInputState = false;
+            }
+        } else {
+            if (!Double.isNaN(input)) {
+                calculate();
+                this.inputString = "";
+                this.input = Double.NaN;
+            }
+            this.operator = operator;
+        }
     }
 
-    public void setInput1(float input1) {
-        this.input1 = input1;
+    public void equate() {
+        if(!Double.isNaN(input)) {
+            calculate();
+            repeatEquation = true;
+        }
     }
 
-    public float getInput2() {
-        return input2;
+    public void clear() {
+        if(clearAll) {
+            initInputState = true;
+            repeatEquation = false;
+            operator = null;
+            resultString = "";
+            result = Double.NaN;
+            inputString = "";
+            input = Double.NaN;
+        }
+        else {
+            if(initInputState) {
+                resultString = "";
+                result = Double.NaN;
+            }
+            else {
+                inputString = "";
+                input = Double.NaN;
+            }
+            clearAll = true;
+        }
     }
 
-    public void setInput2(float input2) {
-        this.input2 = input2;
+    private void calculate() {
+        result = calculator.calculate(result, input, operator);
     }
+
+
+    public boolean isInitInputState() {
+        return initInputState;
+    }
+
+    public void setInitInputState(boolean initInputState) {
+        this.initInputState = initInputState;
+    }
+
+    public String getResultString() {
+        return resultString;
+    }
+
+    public void setResultString(String resultString) {
+        this.resultString = resultString;
+    }
+
+    public String getInputString() {
+        return inputString;
+    }
+
+    public void setInputString(String inputString) {
+        this.inputString = inputString;
+    }
+
+    public double getResult() {
+        return result;
+    }
+
+    public void setResult(double result) {
+        this.result = result;
+    }
+
+    public double getInput() {
+        return input;
+    }
+
+    public void setInput(double input) {
+        this.input = input;
+    }
+
+    public String getOperator() {
+        return operator;
+    }
+
+    public void setOperator(String operator) {
+        this.operator = operator;
+    }
+
+    public boolean isRepeatEquation() {
+        return repeatEquation;
+    }
+
+    public void setRepeatEquation(boolean repeatEquation) {
+        this.repeatEquation = repeatEquation;
+    }
+
+    public boolean isClearAll() {
+        return clearAll;
+    }
+
+    public void setClearAll(boolean clearAll) {
+        this.clearAll = clearAll;
+    }
+
 }
