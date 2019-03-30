@@ -7,6 +7,7 @@ import android.hardware.display.DisplayManager;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.danarcheronline.ekwolz.databinding.ActivityMainBinding;
@@ -29,10 +30,6 @@ public class MainActivity extends AppCompatActivity {
 
         mViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
 
-//        set the expression text view to display the current input
-//        when the device is rotated, the text views content will stay consistent
-        mBinding.expressionTv.setText(mViewModel.getCurrentInput());
-
         mAppContainerResourceId = R.id.appContainer;
 
 //        make the status bar and navigation bar transparent
@@ -42,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
         enableMarginAdjustmentDetection();
 
         setViewOnClickListeners();
+
+        logImportantInfo();
 
     }
 
@@ -56,6 +55,29 @@ public class MainActivity extends AppCompatActivity {
         mBinding.button7.setOnClickListener(new NumberPadButtonOnClickListener("7"));
         mBinding.button8.setOnClickListener(new NumberPadButtonOnClickListener("8"));
         mBinding.button9.setOnClickListener(new NumberPadButtonOnClickListener("9"));
+
+        mBinding.plusButton.setOnClickListener(new OperatorButtonOnClickListener(Calculator.OPERATOR_PLUS));
+        mBinding.minusButton.setOnClickListener(new OperatorButtonOnClickListener(Calculator.OPERATOR_MINUS));
+        mBinding.multiplyButton.setOnClickListener(new OperatorButtonOnClickListener(Calculator.OPERATOR_MULTIPLY));
+        mBinding.divideButton.setOnClickListener(new OperatorButtonOnClickListener(Calculator.OPERATOR_DIVIDE));
+
+        mBinding.equalsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mViewModel.equate();
+
+                logImportantInfo();
+            }
+        });
+
+        mBinding.allClearButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mViewModel.clear();
+
+                logImportantInfo();
+            }
+        });
     }
 
     @Override
@@ -97,9 +119,40 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onClick(View v) {
-            mViewModel.appendToCurrentInput(mNumber);
-            mBinding.expressionTv.setText(mViewModel.getCurrentInput());
+            mViewModel.saveInput(mNumber);
+
+            logImportantInfo();
         }
+    }
+
+    private class OperatorButtonOnClickListener implements View.OnClickListener {
+
+        String mOperator;
+
+        public OperatorButtonOnClickListener(String operator) {
+            this.mOperator = operator;
+        }
+
+        @Override
+        public void onClick(View v) {
+            mViewModel.operate(mOperator);
+
+            logImportantInfo();
+        }
+    }
+
+    private void logImportantInfo() {
+        Log.d(TAG, "=====================================");
+        Log.d(TAG, "initInputState: " + mViewModel.isInitInputState());
+        Log.d(TAG, "repeatEquation: " + mViewModel.isRepeatEquation());
+        Log.d(TAG, "clearAll: " + mViewModel.isClearAll());
+        Log.d(TAG, "operator: " + mViewModel.getOperator());
+        Log.d(TAG, "resultString: " + mViewModel.getResultString());
+        Log.d(TAG, "result: " + mViewModel.getResult());
+        Log.d(TAG, "inputString: " + mViewModel.getInputString());
+        Log.d(TAG, "input: " + mViewModel.getInput());
+        Log.d(TAG, "RESULT OUTPUT: " + mViewModel.decimalFormat.format(mViewModel.getResult()));
+        Log.d(TAG, "=====================================");
     }
 }
 
