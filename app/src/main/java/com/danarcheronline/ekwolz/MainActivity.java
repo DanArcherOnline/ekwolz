@@ -40,8 +40,34 @@ public class MainActivity extends AppCompatActivity {
 
         setViewOnClickListeners();
 
+        initUIState();
+
         logImportantInfo();
 
+    }
+
+    private void initUIState() {
+        updateExpression();
+        if(mViewModel.getOperator() != null) {
+            switch (mViewModel.getOperator()) {
+                case Calculator.OPERATOR_PLUS:
+                    displayPlusButtonPressed();
+                    break;
+                case Calculator.OPERATOR_MINUS:
+                    displayMinusButtonPressed();
+                    break;
+                case Calculator.OPERATOR_MULTIPLY:
+                    displayMultiplyButtonPressed();
+                    break;
+                case Calculator.OPERATOR_DIVIDE:
+                    displayDivideButtonPressed();
+                    break;
+                default:
+                    deselectOperators();
+                    break;
+            }
+        }
+        displayCorrectClearButton();
     }
 
     private void setViewOnClickListeners() {
