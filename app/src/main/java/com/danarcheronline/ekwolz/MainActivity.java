@@ -67,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
                 mViewModel.equate();
                 updateExpression();
 
+                displayAllClearButton();
+
                 logImportantInfo();
             }
         });
@@ -76,6 +78,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 mViewModel.clear();
                 updateExpression();
+
+                displayAllClearButton();
 
                 logImportantInfo();
             }
@@ -119,6 +123,14 @@ public class MainActivity extends AppCompatActivity {
         mBinding.minusButton.setSelected(false);
         mBinding.multiplyButton.setSelected(false);
         mBinding.divideButton.setSelected(false);
+    }
+
+    private void displayClearButton() {
+        mBinding.allClearButton.setBackground(getDrawable(R.drawable.button_clear_selector));
+    }
+
+    private void displayAllClearButton() {
+        mBinding.allClearButton.setBackground(getDrawable(R.drawable.button_all_clear_selector));
     }
 
 
@@ -166,6 +178,7 @@ public class MainActivity extends AppCompatActivity {
             if(mViewModel.getOperator() != null) {
                 deselectOperators();
             }
+            displayClearButton();
 
             logImportantInfo();
         }
@@ -203,6 +216,8 @@ public class MainActivity extends AppCompatActivity {
                         break;
                 }
             }
+
+            displayAllClearButton();
 
             logImportantInfo();
         }
