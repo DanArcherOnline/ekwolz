@@ -48,6 +48,10 @@ public class MainViewModel extends ViewModel {
     }
 
     public void saveInput(String inputToAppend) {
+        if(repeatEquation) {
+            inputString = "";
+            input = Double.NaN;
+        }
         if (initInputState) {
             if (resultString.length() <= 8) {
                 resultString += inputToAppend;
