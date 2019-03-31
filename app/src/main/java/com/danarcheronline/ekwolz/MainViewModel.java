@@ -26,6 +26,27 @@ public class MainViewModel extends ViewModel {
         this.decimalFormat = new DecimalFormat("###,###,###.##############");
     }
 
+    public String getExpressionText() {
+        String expression;
+        if(!Double.isNaN(input)) {
+            if(!clearAll) {
+                expression = decimalFormat.format(getInput());
+            }
+            else {
+                expression = decimalFormat.format(getResult());
+            }
+        }
+        else {
+            if(Double.isNaN(result)) {
+                expression = "";
+            }
+            else {
+                expression = decimalFormat.format(getResult());
+            }
+        }
+        return expression;
+    }
+
     public void saveInput(String inputToAppend) {
         if (initInputState) {
             if (resultString.length() <= 8) {
