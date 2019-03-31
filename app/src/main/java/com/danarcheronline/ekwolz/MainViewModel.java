@@ -64,12 +64,14 @@ public class MainViewModel extends ViewModel {
             }
             this.operator = operator;
         }
+        clearAll = true;
     }
 
     public void equate() {
         if(!Double.isNaN(input)) {
             calculate();
             repeatEquation = true;
+            clearAll = true;
         }
     }
 
@@ -89,8 +91,14 @@ public class MainViewModel extends ViewModel {
                 result = Double.NaN;
             }
             else {
-                inputString = "";
-                input = Double.NaN;
+                if(!Double.isNaN(input)) {
+                    inputString = "";
+                    input = Double.NaN;
+                }
+                else {
+                    resultString = "";
+                    result = Double.NaN;
+                }
             }
             clearAll = true;
         }
