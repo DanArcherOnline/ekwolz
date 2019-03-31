@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mViewModel.equate();
+                updateExpression();
 
                 logImportantInfo();
             }
@@ -74,10 +75,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mViewModel.clear();
+                updateExpression();
 
                 logImportantInfo();
             }
         });
+    }
+
+    private void updateExpression() {
+        mBinding.expressionTv.setText(mViewModel.getExpressionText());
     }
 
     @Override
@@ -120,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             mViewModel.saveInput(mNumber);
+            updateExpression();
 
             logImportantInfo();
         }
@@ -136,6 +143,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             mViewModel.operate(mOperator);
+            updateExpression();
 
             logImportantInfo();
         }
