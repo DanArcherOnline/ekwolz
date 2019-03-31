@@ -86,6 +86,42 @@ public class MainActivity extends AppCompatActivity {
         mBinding.expressionTv.setText(mViewModel.getExpressionText());
     }
 
+    private void displayPlusButtonPressed() {
+        mBinding.plusButton.setSelected(true);
+        mBinding.minusButton.setSelected(false);
+        mBinding.multiplyButton.setSelected(false);
+        mBinding.divideButton.setSelected(false);
+    }
+
+    private void displayMinusButtonPressed() {
+        mBinding.plusButton.setSelected(false);
+        mBinding.minusButton.setSelected(true);
+        mBinding.multiplyButton.setSelected(false);
+        mBinding.divideButton.setSelected(false);
+    }
+
+    private void displayMultiplyButtonPressed() {
+        mBinding.plusButton.setSelected(false);
+        mBinding.minusButton.setSelected(false);
+        mBinding.multiplyButton.setSelected(true);
+        mBinding.divideButton.setSelected(false);
+    }
+
+    private void displayDivideButtonPressed() {
+        mBinding.plusButton.setSelected(false);
+        mBinding.minusButton.setSelected(false);
+        mBinding.multiplyButton.setSelected(false);
+        mBinding.divideButton.setSelected(true);
+    }
+
+    private void deselectOperators() {
+        mBinding.plusButton.setSelected(false);
+        mBinding.minusButton.setSelected(false);
+        mBinding.multiplyButton.setSelected(false);
+        mBinding.divideButton.setSelected(false);
+    }
+
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -127,6 +163,9 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View v) {
             mViewModel.saveInput(mNumber);
             updateExpression();
+            if(mViewModel.getOperator() != null) {
+                deselectOperators();
+            }
 
             logImportantInfo();
         }
@@ -144,6 +183,26 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View v) {
             mViewModel.operate(mOperator);
             updateExpression();
+
+            if(mViewModel.getOperator() != null) {
+                switch (mViewModel.getOperator()) {
+                    case Calculator.OPERATOR_PLUS:
+                        displayPlusButtonPressed();
+                        break;
+                    case Calculator.OPERATOR_MINUS:
+                        displayMinusButtonPressed();
+                        break;
+                    case Calculator.OPERATOR_MULTIPLY:
+                        displayMultiplyButtonPressed();
+                        break;
+                    case Calculator.OPERATOR_DIVIDE:
+                        displayDivideButtonPressed();
+                        break;
+                    default:
+                        deselectOperators();
+                        break;
+                }
+            }
 
             logImportantInfo();
         }
