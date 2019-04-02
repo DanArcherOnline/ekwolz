@@ -1,10 +1,12 @@
 package com.danarcheronline.ekwolz;
 
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.hardware.display.DisplayManager;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,6 +31,12 @@ public class MainActivity extends AppCompatActivity {
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
         mViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+        mViewModel.getExpressionOutput().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(@Nullable String s) {
+                updateExpression(s);
+            }
+        });
 
         mAppContainerResourceId = R.id.appContainer;
 
@@ -47,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initUIState() {
-        updateExpression();
         if(mViewModel.getOperator() != null) {
             switch (mViewModel.getOperator()) {
                 case Calculator.OPERATOR_PLUS:
@@ -91,7 +98,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mViewModel.equate();
-                updateExpression();
                 displayCorrectClearButton();
 
                 logImportantInfo();
@@ -102,7 +108,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mViewModel.clear();
-                updateExpression();
                 displayCorrectClearButton();
                 deselectOperators();
 
@@ -111,8 +116,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void updateExpression() {
-        mBinding.expressionTv.setText(mViewModel.getExpressionText());
+    private void updateExpression(String expression) {
+        mBinding.expressionTv.setText(expression);
     }
 
     private void displayPlusButtonPressed() {
@@ -201,7 +206,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             mViewModel.saveInput(mNumber);
-            updateExpression();
             if(mViewModel.getOperator() != null) {
                 deselectOperators();
             }
@@ -222,7 +226,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             mViewModel.operate(mOperator);
-            updateExpression();
 
             if(mViewModel.getOperator() != null) {
                 switch (mViewModel.getOperator()) {

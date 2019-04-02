@@ -1,6 +1,7 @@
 package com.danarcheronline.ekwolz;
 
 
+import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 
 import java.text.DecimalFormat;
@@ -10,6 +11,8 @@ public class MainViewModel extends ViewModel {
 
     Calculator calculator;
     DecimalFormat decimalFormat;
+
+    MutableLiveData<String> expressionOutput;
 
     private boolean initInputState = true;
     private boolean repeatEquation = false;
@@ -24,31 +27,33 @@ public class MainViewModel extends ViewModel {
     public MainViewModel() {
         this.calculator = new Calculator();
         this.decimalFormat = new DecimalFormat("###,###,###.##############");
+        this.expressionOutput = new MutableLiveData<>();
     }
 
-    public String getExpressionText() {
+    MutableLiveData<String> getExpressionOutput() {
+        return expressionOutput;
+    }
+
+    public void getExpressionText() {
         String expression;
-        if(!Double.isNaN(input)) {
-            if(!clearAll) {
+        if (!Double.isNaN(input)) {
+            if (!clearAll) {
                 expression = decimalFormat.format(getInput());
-            }
-            else {
+            } else {
                 expression = decimalFormat.format(getResult());
             }
-        }
-        else {
-            if(Double.isNaN(result)) {
+        } else {
+            if (Double.isNaN(result)) {
                 expression = "";
-            }
-            else {
+            } else {
                 expression = decimalFormat.format(getResult());
             }
         }
-        return expression;
+        expressionOutput.setValue(expression);
     }
 
     public void saveInput(String inputToAppend) {
-        if(repeatEquation) {
+        if (repeatEquation) {
             inputString = "";
             input = Double.NaN;
         }
@@ -63,9 +68,11 @@ public class MainViewModel extends ViewModel {
                 input = Double.parseDouble(inputString);
             }
         }
-        if(clearAll) {
+        if (clearAll) {
             clearAll = false;
         }
+
+        getExpressionText();
     }
 
     public void operate(String operator) {
@@ -90,18 +97,22 @@ public class MainViewModel extends ViewModel {
             this.operator = operator;
         }
         clearAll = true;
+
+        getExpressionText();
     }
 
     public void equate() {
-        if(!Double.isNaN(input)) {
+        if (!Double.isNaN(input)) {
             calculate();
             repeatEquation = true;
             clearAll = true;
         }
+
+        getExpressionText();
     }
 
     public void clear() {
-        if(clearAll) {
+        if (clearAll) {
             initInputState = true;
             repeatEquation = false;
             operator = null;
@@ -109,24 +120,23 @@ public class MainViewModel extends ViewModel {
             result = Double.NaN;
             inputString = "";
             input = Double.NaN;
-        }
-        else {
-            if(initInputState) {
+        } else {
+            if (initInputState) {
                 resultString = "";
                 result = Double.NaN;
-            }
-            else {
-                if(!Double.isNaN(input)) {
+            } else {
+                if (!Double.isNaN(input)) {
                     inputString = "";
                     input = Double.NaN;
-                }
-                else {
+                } else {
                     resultString = "";
                     result = Double.NaN;
                 }
             }
             clearAll = true;
         }
+
+        getExpressionText();
     }
 
     private void calculate() {
