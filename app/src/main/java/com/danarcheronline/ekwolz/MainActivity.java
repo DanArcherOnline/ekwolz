@@ -12,7 +12,7 @@ import android.view.View;
 
 import com.danarcheronline.ekwolz.databinding.ActivityMainBinding;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = MainActivity.class.getName();
 
@@ -70,17 +70,26 @@ public class MainActivity extends AppCompatActivity {
         displayCorrectClearButton();
     }
 
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()) {
+            case R.id.button0:
+                clickNumberButton("0");
+                break;
+        }
+    }
+
     private void setViewOnClickListeners() {
-        mBinding.button0.setOnClickListener(new NumberPadButtonOnClickListener("0"));
-        mBinding.button1.setOnClickListener(new NumberPadButtonOnClickListener("1"));
-        mBinding.button2.setOnClickListener(new NumberPadButtonOnClickListener("2"));
-        mBinding.button3.setOnClickListener(new NumberPadButtonOnClickListener("3"));
-        mBinding.button4.setOnClickListener(new NumberPadButtonOnClickListener("4"));
-        mBinding.button5.setOnClickListener(new NumberPadButtonOnClickListener("5"));
-        mBinding.button6.setOnClickListener(new NumberPadButtonOnClickListener("6"));
-        mBinding.button7.setOnClickListener(new NumberPadButtonOnClickListener("7"));
-        mBinding.button8.setOnClickListener(new NumberPadButtonOnClickListener("8"));
-        mBinding.button9.setOnClickListener(new NumberPadButtonOnClickListener("9"));
+        mBinding.button0.setOnClickListener(this);
+        mBinding.button1.setOnClickListener(this);
+        mBinding.button2.setOnClickListener(this);
+        mBinding.button3.setOnClickListener(this);
+        mBinding.button4.setOnClickListener(this);
+        mBinding.button5.setOnClickListener(this);
+        mBinding.button6.setOnClickListener(this);
+        mBinding.button7.setOnClickListener(this);
+        mBinding.button8.setOnClickListener(this);
+        mBinding.button9.setOnClickListener(this);
 
         mBinding.plusButton.setOnClickListener(new OperatorButtonOnClickListener(Calculator.OPERATOR_PLUS));
         mBinding.minusButton.setOnClickListener(new OperatorButtonOnClickListener(Calculator.OPERATOR_MINUS));
@@ -190,25 +199,18 @@ public class MainActivity extends AppCompatActivity {
         displayManager.registerDisplayListener(mDisplayListener, new Handler());
     }
 
-    private class NumberPadButtonOnClickListener implements View.OnClickListener {
 
-        String mNumber;
 
-        public NumberPadButtonOnClickListener(String number) {
-            this.mNumber = number;
+
+    private void clickNumberButton(String numberString) {
+        mViewModel.saveInput(numberString);
+        updateExpression();
+        if(mViewModel.getOperator() != null) {
+            deselectOperators();
         }
+        displayCorrectClearButton();
 
-        @Override
-        public void onClick(View v) {
-            mViewModel.saveInput(mNumber);
-            updateExpression();
-            if(mViewModel.getOperator() != null) {
-                deselectOperators();
-            }
-            displayCorrectClearButton();
-
-            logImportantInfo();
-        }
+        logImportantInfo();
     }
 
     private class OperatorButtonOnClickListener implements View.OnClickListener {
