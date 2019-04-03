@@ -1,9 +1,9 @@
-package com.danarcheronline.ekwolz;
-
+package com.danarcheronline.ekwolz.ViewModel;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
 
+import com.danarcheronline.ekwolz.Model.Calculator;
 
 public class MainViewModel extends ViewModel {
 
@@ -15,7 +15,7 @@ public class MainViewModel extends ViewModel {
     }
 
 
-
+    //BUTTON LOGIC METHODS
     public void operate(String operator) {
         calculator.operate(operator);
     }
@@ -33,7 +33,7 @@ public class MainViewModel extends ViewModel {
     }
 
 
-
+    //Data getters
     public LiveData<String> getExpressionOutput() {
         return calculator.getExpressionOutput();
     }

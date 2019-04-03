@@ -1,25 +1,32 @@
-package com.danarcheronline.ekwolz;
+package com.danarcheronline.ekwolz.View;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.hardware.display.DisplayManager;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.danarcheronline.ekwolz.Model.Calculator;
+import com.danarcheronline.ekwolz.R;
+import com.danarcheronline.ekwolz.Utils.UIUtils;
+import com.danarcheronline.ekwolz.ViewModel.MainViewModel;
 import com.danarcheronline.ekwolz.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = MainActivity.class.getName();
 
+    //Full Screen BG Helpers
     DisplayManager.DisplayListener mDisplayListener;
     int mAppContainerResourceId;
+
+    //View Helpers
     MainViewModel mViewModel;
     ActivityMainBinding mBinding;
 
@@ -34,10 +41,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mViewModel.getExpressionOutput().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
+                //update the text shown on the calculator
                 updateExpression(s);
             }
         });
 
+        //get a global handle for the layouts container view to adjust margins (for full screen bg)
         mAppContainerResourceId = R.id.appContainer;
 
 //        make the status bar and navigation bar transparent
@@ -51,8 +60,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initUIState();
     }
 
+    /**
+     * Make sure the UI elements remain in the same state after device config changes
+     */
     private void initUIState() {
-        if(mViewModel.getOperator() != null) {
+        if (mViewModel.getOperator() != null) {
+            //if the operator has already been chosen
             switch (mViewModel.getOperator()) {
                 case Calculator.OPERATOR_PLUS:
                     displayPlusButtonPressed();
@@ -74,38 +87,57 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         displayCorrectClearButton();
     }
 
+    private void setViewOnClickListeners() {
+        mBinding.button0.setOnClickListener(this);
+        mBinding.button1.setOnClickListener(this);
+        mBinding.button2.setOnClickListener(this);
+        mBinding.button3.setOnClickListener(this);
+        mBinding.button4.setOnClickListener(this);
+        mBinding.button5.setOnClickListener(this);
+        mBinding.button6.setOnClickListener(this);
+        mBinding.button7.setOnClickListener(this);
+        mBinding.button8.setOnClickListener(this);
+        mBinding.button9.setOnClickListener(this);
+        mBinding.plusButton.setOnClickListener(this);
+        mBinding.minusButton.setOnClickListener(this);
+        mBinding.multiplyButton.setOnClickListener(this);
+        mBinding.divideButton.setOnClickListener(this);
+        mBinding.equalsButton.setOnClickListener(this);
+        mBinding.allClearButton.setOnClickListener(this);
+    }
+
     @Override
     public void onClick(View v) {
-        switch(v.getId()) {
+        switch (v.getId()) {
             case R.id.button0:
-                clickNumberButton("0");
+                clickNumberButton(getString(R.string.zero));
                 break;
             case R.id.button1:
-                clickNumberButton("1");
+                clickNumberButton(getString(R.string.one));
                 break;
             case R.id.button2:
-                clickNumberButton("2");
+                clickNumberButton(getString(R.string.two));
                 break;
             case R.id.button3:
-                clickNumberButton("3");
+                clickNumberButton(getString(R.string.three));
                 break;
             case R.id.button4:
-                clickNumberButton("4");
+                clickNumberButton(getString(R.string.four));
                 break;
             case R.id.button5:
-                clickNumberButton("5");
+                clickNumberButton(getString(R.string.five));
                 break;
             case R.id.button6:
-                clickNumberButton("6");
+                clickNumberButton(getString(R.string.six));
                 break;
             case R.id.button7:
-                clickNumberButton("7");
+                clickNumberButton(getString(R.string.seven));
                 break;
             case R.id.button8:
-                clickNumberButton("8");
+                clickNumberButton(getString(R.string.eight));
                 break;
             case R.id.button9:
-                clickNumberButton("9");
+                clickNumberButton(getString(R.string.nine));
                 break;
             case R.id.all_clear_button:
                 clickClearButton();
@@ -131,23 +163,41 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void setViewOnClickListeners() {
-        mBinding.button0.setOnClickListener(this);
-        mBinding.button1.setOnClickListener(this);
-        mBinding.button2.setOnClickListener(this);
-        mBinding.button3.setOnClickListener(this);
-        mBinding.button4.setOnClickListener(this);
-        mBinding.button5.setOnClickListener(this);
-        mBinding.button6.setOnClickListener(this);
-        mBinding.button7.setOnClickListener(this);
-        mBinding.button8.setOnClickListener(this);
-        mBinding.button9.setOnClickListener(this);
-        mBinding.plusButton.setOnClickListener(this);
-        mBinding.minusButton.setOnClickListener(this);
-        mBinding.multiplyButton.setOnClickListener(this);
-        mBinding.divideButton.setOnClickListener(this);
-        mBinding.equalsButton.setOnClickListener(this);
-        mBinding.allClearButton.setOnClickListener(this);
+
+    //BUTTON LOGIC METHODS
+    private void clickOperatorButton(String operator) {
+        mViewModel.operate(operator);
+
+        if (mViewModel.getOperator() != null) {
+            switch (mViewModel.getOperator()) {
+                case Calculator.OPERATOR_PLUS:
+                    displayPlusButtonPressed();
+                    break;
+                case Calculator.OPERATOR_MINUS:
+                    displayMinusButtonPressed();
+                    break;
+                case Calculator.OPERATOR_MULTIPLY:
+                    displayMultiplyButtonPressed();
+                    break;
+                case Calculator.OPERATOR_DIVIDE:
+                    displayDivideButtonPressed();
+                    break;
+                default:
+                    deselectOperators();
+                    break;
+            }
+        }
+        displayCorrectClearButton();
+
+    }
+
+    private void clickNumberButton(String numberString) {
+        mViewModel.saveInput(numberString);
+        if (mViewModel.getOperator() != null) {
+            deselectOperators();
+        }
+        displayCorrectClearButton();
+
     }
 
     private void clickClearButton() {
@@ -161,6 +211,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         displayCorrectClearButton();
     }
 
+
+    //UI METHODS
     private void updateExpression(String expression) {
         mBinding.expressionTv.setText(expression);
     }
@@ -201,16 +253,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void displayCorrectClearButton() {
-        if(mViewModel.isClearAll()) {
+        if (mViewModel.isClearAll()) {
             mBinding.allClearButton.setBackground(getDrawable(R.drawable.button_all_clear_selector));
-        }
-        else {
+        } else {
             mBinding.allClearButton.setBackground(getDrawable(R.drawable.button_clear_selector));
         }
 
     }
 
 
+    //FULL SCREEN BG
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -219,6 +271,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    /**
+     * Listens for when orientation changes in the display
+     */
     private void enableMarginAdjustmentDetection() {
         mDisplayListener = new DisplayManager.DisplayListener() {
 
@@ -238,42 +293,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         DisplayManager displayManager = (DisplayManager) this.getSystemService(Context.DISPLAY_SERVICE);
         displayManager.registerDisplayListener(mDisplayListener, new Handler());
-    }
-
-
-    private void clickOperatorButton(String operator) {
-        mViewModel.operate(operator);
-
-        if(mViewModel.getOperator() != null) {
-            switch (mViewModel.getOperator()) {
-                case Calculator.OPERATOR_PLUS:
-                    displayPlusButtonPressed();
-                    break;
-                case Calculator.OPERATOR_MINUS:
-                    displayMinusButtonPressed();
-                    break;
-                case Calculator.OPERATOR_MULTIPLY:
-                    displayMultiplyButtonPressed();
-                    break;
-                case Calculator.OPERATOR_DIVIDE:
-                    displayDivideButtonPressed();
-                    break;
-                default:
-                    deselectOperators();
-                    break;
-            }
-        }
-        displayCorrectClearButton();
-
-    }
-
-    private void clickNumberButton(String numberString) {
-        mViewModel.saveInput(numberString);
-        if(mViewModel.getOperator() != null) {
-            deselectOperators();
-        }
-        displayCorrectClearButton();
-
     }
 
 

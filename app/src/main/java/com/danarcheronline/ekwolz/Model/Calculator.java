@@ -1,4 +1,4 @@
-package com.danarcheronline.ekwolz;
+package com.danarcheronline.ekwolz.Model;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
@@ -15,25 +15,38 @@ public class Calculator {
     public static final String OPERATOR_MULTIPLY = "multiply";
     public static final String OPERATOR_DIVIDE = "divide";
 
+    //formatter for mExpressionOutput
     private DecimalFormat decimalFormat;
 
+    //text the user sees on the calculator
     private MutableLiveData<String> mExpressionOutput;
 
+    //states of the calculator
     private boolean mInitInputState = true;
     private boolean mRepeatEquation = false;
     private boolean mClearAll = true;
 
+    //calculation related data
     private String mResultString = "";
     private String mInputString = "";
     private double mResult = Double.NaN;
     private double mInput = Double.NaN;
     private String mOperator;
 
+
     public Calculator() {
         this.decimalFormat = new DecimalFormat("###,###,###.##############");
         this.mExpressionOutput = new MutableLiveData<>();
     }
 
+    /**
+     * Takes 2 inputs and an operator and returns the answer of the calculation
+     *
+     * @param input1   the first input. Often already stored as the result of the last equation
+     * @param input2   the second input. Always the most recently typed input from the user
+     * @param operator the operand the user has chosen
+     * @return the result of the calculation as a double
+     */
     public double calculate(double input1, double input2, String operator) {
         switch (operator) {
             case OPERATOR_PLUS:
@@ -51,9 +64,9 @@ public class Calculator {
     }
 
 
-
-
-
+    /**
+     * Decides whether to display the result or what the user is currently typing
+     */
     private void chooseOutput() {
         String expression;
         if (!Double.isNaN(mInput)) {
@@ -72,6 +85,11 @@ public class Calculator {
         mExpressionOutput.setValue(expression);
     }
 
+    /**
+     * updates the input data for what the user is typing
+     *
+     * @param inputToAppend the number to add on to the already existing typed numbers
+     */
     public void saveInput(String inputToAppend) {
         if (mRepeatEquation) {
             mInputString = "";
@@ -97,6 +115,11 @@ public class Calculator {
         logDebugInfo();
     }
 
+    /**
+     * Sets the operator to the chosen operand and also calculates the current equation
+     *
+     * @param operator
+     */
     public void operate(String operator) {
 
         if (mRepeatEquation) {
@@ -125,6 +148,9 @@ public class Calculator {
         logDebugInfo();
     }
 
+    /**
+     * calculates the current equation
+     */
     public void equate() {
         if (!Double.isNaN(mInput)) {
             mResult = calculate(mResult, mInput, mOperator);
@@ -137,6 +163,10 @@ public class Calculator {
         logDebugInfo();
     }
 
+    /**
+     * Clears both input, stored result, and chosen operator if in 'allClear' state.
+     * Clears just the recently input number displayed if in 'clear' state.
+     */
     public void clear() {
         if (mClearAll) {
             mInitInputState = true;
@@ -168,8 +198,7 @@ public class Calculator {
     }
 
 
-
-
+    //Data getters
     public LiveData<String> getExpressionOutput() {
         return mExpressionOutput;
     }
@@ -183,11 +212,7 @@ public class Calculator {
     }
 
 
-
-
-
-
-
+    //Debugging logs to easily check the state of the calculator when outside of debug mode
     private void logDebugInfo() {
         Log.d(TAG, "=====================================");
         Log.d(TAG, "initInputState: " + mInitInputState);
