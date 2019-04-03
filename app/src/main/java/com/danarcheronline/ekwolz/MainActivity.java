@@ -76,6 +76,54 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.button0:
                 clickNumberButton("0");
                 break;
+            case R.id.button1:
+                clickNumberButton("1");
+                break;
+            case R.id.button2:
+                clickNumberButton("2");
+                break;
+            case R.id.button3:
+                clickNumberButton("3");
+                break;
+            case R.id.button4:
+                clickNumberButton("4");
+                break;
+            case R.id.button5:
+                clickNumberButton("5");
+                break;
+            case R.id.button6:
+                clickNumberButton("6");
+                break;
+            case R.id.button7:
+                clickNumberButton("7");
+                break;
+            case R.id.button8:
+                clickNumberButton("8");
+                break;
+            case R.id.button9:
+                clickNumberButton("9");
+                break;
+            case R.id.all_clear_button:
+                clickClearButton();
+                break;
+            case R.id.equals_button:
+                clickEqualsButton();
+                break;
+            case R.id.plus_button:
+                clickOperatorButton(Calculator.OPERATOR_PLUS);
+                break;
+            case R.id.minus_button:
+                clickOperatorButton(Calculator.OPERATOR_MINUS);
+                break;
+            case R.id.multiply_button:
+                clickOperatorButton(Calculator.OPERATOR_MULTIPLY);
+                break;
+            case R.id.divide_button:
+                clickOperatorButton(Calculator.OPERATOR_DIVIDE);
+                break;
+            default:
+                Log.e(TAG, "onClick: View that caused the click event could not be found");
+                break;
         }
     }
 
@@ -90,34 +138,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBinding.button7.setOnClickListener(this);
         mBinding.button8.setOnClickListener(this);
         mBinding.button9.setOnClickListener(this);
+        mBinding.plusButton.setOnClickListener(this);
+        mBinding.minusButton.setOnClickListener(this);
+        mBinding.multiplyButton.setOnClickListener(this);
+        mBinding.divideButton.setOnClickListener(this);
+        mBinding.equalsButton.setOnClickListener(this);
+        mBinding.allClearButton.setOnClickListener(this);
+    }
 
-        mBinding.plusButton.setOnClickListener(new OperatorButtonOnClickListener(Calculator.OPERATOR_PLUS));
-        mBinding.minusButton.setOnClickListener(new OperatorButtonOnClickListener(Calculator.OPERATOR_MINUS));
-        mBinding.multiplyButton.setOnClickListener(new OperatorButtonOnClickListener(Calculator.OPERATOR_MULTIPLY));
-        mBinding.divideButton.setOnClickListener(new OperatorButtonOnClickListener(Calculator.OPERATOR_DIVIDE));
+    private void clickClearButton() {
+        mViewModel.clear();
+        updateExpression();
+        displayCorrectClearButton();
+        deselectOperators();
 
-        mBinding.equalsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mViewModel.equate();
-                updateExpression();
-                displayCorrectClearButton();
+        logImportantInfo();
+    }
 
-                logImportantInfo();
-            }
-        });
+    private void clickEqualsButton() {
+        mViewModel.equate();
+        updateExpression();
+        displayCorrectClearButton();
 
-        mBinding.allClearButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mViewModel.clear();
-                updateExpression();
-                displayCorrectClearButton();
-                deselectOperators();
-
-                logImportantInfo();
-            }
-        });
+        logImportantInfo();
     }
 
     private void updateExpression() {
@@ -200,7 +243,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
+    private void clickOperatorButton(String operator) {
+        mViewModel.operate(operator);
+        updateExpression();
 
+        if(mViewModel.getOperator() != null) {
+            switch (mViewModel.getOperator()) {
+                case Calculator.OPERATOR_PLUS:
+                    displayPlusButtonPressed();
+                    break;
+                case Calculator.OPERATOR_MINUS:
+                    displayMinusButtonPressed();
+                    break;
+                case Calculator.OPERATOR_MULTIPLY:
+                    displayMultiplyButtonPressed();
+                    break;
+                case Calculator.OPERATOR_DIVIDE:
+                    displayDivideButtonPressed();
+                    break;
+                default:
+                    deselectOperators();
+                    break;
+            }
+        }
+        displayCorrectClearButton();
+
+        logImportantInfo();
+    }
 
     private void clickNumberButton(String numberString) {
         mViewModel.saveInput(numberString);
@@ -211,44 +280,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         displayCorrectClearButton();
 
         logImportantInfo();
-    }
-
-    private class OperatorButtonOnClickListener implements View.OnClickListener {
-
-        String mOperator;
-
-        public OperatorButtonOnClickListener(String operator) {
-            this.mOperator = operator;
-        }
-
-        @Override
-        public void onClick(View v) {
-            mViewModel.operate(mOperator);
-            updateExpression();
-
-            if(mViewModel.getOperator() != null) {
-                switch (mViewModel.getOperator()) {
-                    case Calculator.OPERATOR_PLUS:
-                        displayPlusButtonPressed();
-                        break;
-                    case Calculator.OPERATOR_MINUS:
-                        displayMinusButtonPressed();
-                        break;
-                    case Calculator.OPERATOR_MULTIPLY:
-                        displayMultiplyButtonPressed();
-                        break;
-                    case Calculator.OPERATOR_DIVIDE:
-                        displayDivideButtonPressed();
-                        break;
-                    default:
-                        deselectOperators();
-                        break;
-                }
-            }
-            displayCorrectClearButton();
-
-            logImportantInfo();
-        }
     }
 
     private void logImportantInfo() {
