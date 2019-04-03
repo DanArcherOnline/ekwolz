@@ -49,9 +49,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setViewOnClickListeners();
 
         initUIState();
-
-        logImportantInfo();
-
     }
 
     private void initUIState() {
@@ -157,14 +154,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mViewModel.clear();
         displayCorrectClearButton();
         deselectOperators();
-        logImportantInfo();
     }
 
     private void clickEqualsButton() {
         mViewModel.equate();
         displayCorrectClearButton();
-
-        logImportantInfo();
     }
 
     private void updateExpression(String expression) {
@@ -271,7 +265,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         displayCorrectClearButton();
 
-        logImportantInfo();
     }
 
     private void clickNumberButton(String numberString) {
@@ -281,22 +274,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         displayCorrectClearButton();
 
-        logImportantInfo();
     }
 
-    private void logImportantInfo() {
-        Log.d(TAG, "=====================================");
-        Log.d(TAG, "initInputState: " + mViewModel.isInitInputState());
-        Log.d(TAG, "repeatEquation: " + mViewModel.isRepeatEquation());
-        Log.d(TAG, "clearAll: " + mViewModel.isClearAll());
-        Log.d(TAG, "operator: " + mViewModel.getOperator());
-        Log.d(TAG, "resultString: " + mViewModel.getResultString());
-        Log.d(TAG, "result: " + mViewModel.getResult());
-        Log.d(TAG, "inputString: " + mViewModel.getInputString());
-        Log.d(TAG, "input: " + mViewModel.getInput());
-        Log.d(TAG, "RESULT OUTPUT: " + mViewModel.decimalFormat.format(mViewModel.getResult()));
-        Log.d(TAG, "=====================================");
-    }
+
 }
 
 
