@@ -14,7 +14,7 @@ import android.view.View;
 
 import com.danarcheronline.ekwolz.databinding.ActivityMainBinding;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = MainActivity.class.getName();
 
@@ -77,43 +77,94 @@ public class MainActivity extends AppCompatActivity {
         displayCorrectClearButton();
     }
 
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()) {
+            case R.id.button0:
+                clickNumberButton("0");
+                break;
+            case R.id.button1:
+                clickNumberButton("1");
+                break;
+            case R.id.button2:
+                clickNumberButton("2");
+                break;
+            case R.id.button3:
+                clickNumberButton("3");
+                break;
+            case R.id.button4:
+                clickNumberButton("4");
+                break;
+            case R.id.button5:
+                clickNumberButton("5");
+                break;
+            case R.id.button6:
+                clickNumberButton("6");
+                break;
+            case R.id.button7:
+                clickNumberButton("7");
+                break;
+            case R.id.button8:
+                clickNumberButton("8");
+                break;
+            case R.id.button9:
+                clickNumberButton("9");
+                break;
+            case R.id.all_clear_button:
+                clickClearButton();
+                break;
+            case R.id.equals_button:
+                clickEqualsButton();
+                break;
+            case R.id.plus_button:
+                clickOperatorButton(Calculator.OPERATOR_PLUS);
+                break;
+            case R.id.minus_button:
+                clickOperatorButton(Calculator.OPERATOR_MINUS);
+                break;
+            case R.id.multiply_button:
+                clickOperatorButton(Calculator.OPERATOR_MULTIPLY);
+                break;
+            case R.id.divide_button:
+                clickOperatorButton(Calculator.OPERATOR_DIVIDE);
+                break;
+            default:
+                Log.e(TAG, "onClick: View that caused the click event could not be found");
+                break;
+        }
+    }
+
     private void setViewOnClickListeners() {
-        mBinding.button0.setOnClickListener(new NumberPadButtonOnClickListener("0"));
-        mBinding.button1.setOnClickListener(new NumberPadButtonOnClickListener("1"));
-        mBinding.button2.setOnClickListener(new NumberPadButtonOnClickListener("2"));
-        mBinding.button3.setOnClickListener(new NumberPadButtonOnClickListener("3"));
-        mBinding.button4.setOnClickListener(new NumberPadButtonOnClickListener("4"));
-        mBinding.button5.setOnClickListener(new NumberPadButtonOnClickListener("5"));
-        mBinding.button6.setOnClickListener(new NumberPadButtonOnClickListener("6"));
-        mBinding.button7.setOnClickListener(new NumberPadButtonOnClickListener("7"));
-        mBinding.button8.setOnClickListener(new NumberPadButtonOnClickListener("8"));
-        mBinding.button9.setOnClickListener(new NumberPadButtonOnClickListener("9"));
+        mBinding.button0.setOnClickListener(this);
+        mBinding.button1.setOnClickListener(this);
+        mBinding.button2.setOnClickListener(this);
+        mBinding.button3.setOnClickListener(this);
+        mBinding.button4.setOnClickListener(this);
+        mBinding.button5.setOnClickListener(this);
+        mBinding.button6.setOnClickListener(this);
+        mBinding.button7.setOnClickListener(this);
+        mBinding.button8.setOnClickListener(this);
+        mBinding.button9.setOnClickListener(this);
+        mBinding.plusButton.setOnClickListener(this);
+        mBinding.minusButton.setOnClickListener(this);
+        mBinding.multiplyButton.setOnClickListener(this);
+        mBinding.divideButton.setOnClickListener(this);
+        mBinding.equalsButton.setOnClickListener(this);
+        mBinding.allClearButton.setOnClickListener(this);
+    }
 
-        mBinding.plusButton.setOnClickListener(new OperatorButtonOnClickListener(Calculator.OPERATOR_PLUS));
-        mBinding.minusButton.setOnClickListener(new OperatorButtonOnClickListener(Calculator.OPERATOR_MINUS));
-        mBinding.multiplyButton.setOnClickListener(new OperatorButtonOnClickListener(Calculator.OPERATOR_MULTIPLY));
-        mBinding.divideButton.setOnClickListener(new OperatorButtonOnClickListener(Calculator.OPERATOR_DIVIDE));
+    private void clickClearButton() {
+        mViewModel.clear();
+        displayCorrectClearButton();
+        deselectOperators();
+        logImportantInfo();
+    }
 
-        mBinding.equalsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mViewModel.equate();
-                displayCorrectClearButton();
+    private void clickEqualsButton() {
+        mViewModel.equate();
+        displayCorrectClearButton();
 
-                logImportantInfo();
-            }
-        });
-
-        mBinding.allClearButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mViewModel.clear();
-                displayCorrectClearButton();
-                deselectOperators();
-
-                logImportantInfo();
-            }
-        });
+        logImportantInfo();
     }
 
     private void updateExpression(String expression) {
@@ -195,61 +246,42 @@ public class MainActivity extends AppCompatActivity {
         displayManager.registerDisplayListener(mDisplayListener, new Handler());
     }
 
-    private class NumberPadButtonOnClickListener implements View.OnClickListener {
 
-        String mNumber;
+    private void clickOperatorButton(String operator) {
+        mViewModel.operate(operator);
 
-        public NumberPadButtonOnClickListener(String number) {
-            this.mNumber = number;
-        }
-
-        @Override
-        public void onClick(View v) {
-            mViewModel.saveInput(mNumber);
-            if(mViewModel.getOperator() != null) {
-                deselectOperators();
+        if(mViewModel.getOperator() != null) {
+            switch (mViewModel.getOperator()) {
+                case Calculator.OPERATOR_PLUS:
+                    displayPlusButtonPressed();
+                    break;
+                case Calculator.OPERATOR_MINUS:
+                    displayMinusButtonPressed();
+                    break;
+                case Calculator.OPERATOR_MULTIPLY:
+                    displayMultiplyButtonPressed();
+                    break;
+                case Calculator.OPERATOR_DIVIDE:
+                    displayDivideButtonPressed();
+                    break;
+                default:
+                    deselectOperators();
+                    break;
             }
-            displayCorrectClearButton();
-
-            logImportantInfo();
         }
+        displayCorrectClearButton();
+
+        logImportantInfo();
     }
 
-    private class OperatorButtonOnClickListener implements View.OnClickListener {
-
-        String mOperator;
-
-        public OperatorButtonOnClickListener(String operator) {
-            this.mOperator = operator;
+    private void clickNumberButton(String numberString) {
+        mViewModel.saveInput(numberString);
+        if(mViewModel.getOperator() != null) {
+            deselectOperators();
         }
+        displayCorrectClearButton();
 
-        @Override
-        public void onClick(View v) {
-            mViewModel.operate(mOperator);
-
-            if(mViewModel.getOperator() != null) {
-                switch (mViewModel.getOperator()) {
-                    case Calculator.OPERATOR_PLUS:
-                        displayPlusButtonPressed();
-                        break;
-                    case Calculator.OPERATOR_MINUS:
-                        displayMinusButtonPressed();
-                        break;
-                    case Calculator.OPERATOR_MULTIPLY:
-                        displayMultiplyButtonPressed();
-                        break;
-                    case Calculator.OPERATOR_DIVIDE:
-                        displayDivideButtonPressed();
-                        break;
-                    default:
-                        deselectOperators();
-                        break;
-                }
-            }
-            displayCorrectClearButton();
-
-            logImportantInfo();
-        }
+        logImportantInfo();
     }
 
     private void logImportantInfo() {
