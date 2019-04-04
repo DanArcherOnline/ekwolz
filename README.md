@@ -28,7 +28,7 @@ The functionality I chose to use in Ekwolz are as follows:
 
 
 
-## installation
+## Installation
 
 Clone this repository and import into **Android Studio**
 
